@@ -1,15 +1,15 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { AiOutlineLogout } from "react-icons/ai";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import { BiSearch } from "react-icons/bi";
-import { IoMdAdd } from "react-icons/io";
-import Logo from "../utils/tiktik-logo.png";
-import { createOrGetUser } from "../utils";
 
+import { AiOutlineLogout } from "react-icons/ai";
+import { BiSearch } from "react-icons/bi";
+import Image from "next/image";
+import { IoMdAdd } from "react-icons/io";
+import Link from "next/link";
+import Logo from "../utils/tiktik-logo.png";
+import React from "react";
+import { createOrGetUser } from "../utils";
 import useAuthStore from "../store/authStore";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { userProfile, addUser, removeUser } = useAuthStore();
