@@ -32,7 +32,7 @@ const Comments = ({
   const { userProfile, allUsers }: any = useAuthStore();
 
   return (
-    <div className="border-t-2 border-gray-200 pt-4 px-10 bg-[#F8F8F8] border-b-2 lg:pb-0 pb-[100px]">
+    <div className="border-t-2 border-gray-200 px-10 bg-[#F8F8F8] border-b-2 lg:pb-0 pb-[100px]">
       <div className="overflow-scroll lg:h-[475px]">
         {comments?.length > 0 ? (
           comments?.map((item: IComment, idx: number) => (
@@ -73,7 +73,7 @@ const Comments = ({
             </>
           ))
         ) : (
-          <NoResults text="No comments yet! Be the first one to add a comment." />
+          <NoResults text="No comments yet!" />
         )}
       </div>
 
