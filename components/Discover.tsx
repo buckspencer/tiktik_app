@@ -1,8 +1,7 @@
-import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-
+import React from "react";
 import { topics } from "../utils/constants";
+import { useRouter } from "next/router";
 
 const Discover = () => {
   const router = useRouter();
@@ -20,7 +19,7 @@ const Discover = () => {
       </p>
       <div className="flex gap-3 flex-wrap">
         {topics.map((item) => (
-          <Link href={`/topic-${item.name}`} key={item.name}>
+          <Link href={`/?topic=${item.name}`} key={item.name}>
             <div
               className={topic === item.name ? activeTopicStyle : topicStyle}
             >
