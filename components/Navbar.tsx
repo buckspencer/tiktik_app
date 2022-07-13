@@ -20,7 +20,7 @@ const Navbar = () => {
     e.preventDefault();
 
     if (searchValue) {
-      router.push(`search/${searchValue}`);
+      router.replace(`/search/${searchValue}`);
     }
   };
 
