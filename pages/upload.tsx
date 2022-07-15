@@ -1,10 +1,14 @@
+import "@uppy/core/dist/style.css";
+import "@uppy/dashboard/dist/style.css";
+
 import React, { useEffect, useState } from "react";
 
 import { BASE_URL } from "../utils";
-import Dropzone from "react-dropzone";
+import { Dashboard } from "@uppy/react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { SanityAssetDocument } from "@sanity/client";
+import Uppy from "@uppy/core";
 import axios from "axios";
 import { client } from "../utils/client";
 import { topics } from "../utils/constants";
@@ -25,12 +29,11 @@ const Upload = () => {
   const router = useRouter();
 
   const uploadVideo = async (files: any) => {
-    const selectedFile = files[0];
+    const selectedFile = files.successful[0];
     const fileTypes = ["video/mp4", "video/webm", "video/ogg"];
-
     if (fileTypes.includes(selectedFile.type)) {
       client.assets
-        .upload("file", selectedFile, {
+        .upload("file", selectedFile.data, {
           contentType: selectedFile.type,
           filename: selectedFile.name,
         })
@@ -43,6 +46,17 @@ const Upload = () => {
       setWrongFileType(true);
     }
   };
+
+  const uppy = new Uppy({
+    autoProceed: false,
+    allowMultipleUploads: false,
+    restrictions: {
+      maxFileSize: 50000000,
+      maxNumberOfFiles: 1,
+      minNumberOfFiles: null,
+      allowedFileTypes: [".mp4", ".webm", ".ogg"],
+    },
+  }).on("complete", uploadVideo);
 
   const handlePost = async () => {
     if (caption && videoAsset?._id && category) {
@@ -107,23 +121,13 @@ const Upload = () => {
                     ></video>
                   </div>
                 ) : (
-                  <Dropzone onDrop={uploadVideo}>
-                    {({ getRootProps, getInputProps }) => (
-                      <section>
-                        <div {...getRootProps()}>
-                          <input {...getInputProps()} />
-                          <p className="text-gray-400 text-center mt-10 text-sm leading-10">
-                            Drag and drop your video or click here to upload
-                            <br />
-                            MP4 or WebM or ogg <br />
-                            720x1280 or higher <br />
-                            Up to 10 minutes <br />
-                            Less than 2GB
-                          </p>
-                        </div>
-                      </section>
-                    )}
-                  </Dropzone>
+                  <Dashboard
+                    uppy={uppy}
+                    width={250}
+                    height={450}
+                    proudlyDisplayPoweredByUppy={false}
+                    showProgressDetails={true}
+                  />
                 )}
               </div>
             )}
