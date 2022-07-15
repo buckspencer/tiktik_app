@@ -22,4 +22,4 @@
 
 ### Screenshots:
 
-<img width="1175" alt="Screen Shot 2022-07-12 at 4 20 57 PM" src="https://user-images.githubusercontent.com/5303892/178614790-cbb30597-89f6-4eb2-a23b-08358fa3a85c.png">
+<img width="1220" alt="Screen Shot 2022-07-15 at 12 22 02 PM" src="https://user-images.githubusercontent.com/5303892/179296586-70f00486-9338-4ac9-a0be-8b0cd0cc1d3d.png">
