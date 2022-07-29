@@ -1,3 +1,13 @@
+export const deletePostReactionQuery = (postId: string, userId: string, emoji: string) => {
+    const query = `*[_type == "post" && _id == "${postId}" ]{
+      _id,
+      caption,
+      reactions[emoji == "${emoji}" && userRef._ref match "${userId}"]{_key}
+    }`
+
+    return query;
+}
+
 export const allPostsQuery = () => {
   const query = `*[_type == "post"] | order(_createdAt desc){
     _id,
@@ -46,6 +56,7 @@ export const postDetailQuery = (postId: string | string[]) => {
       image
     },
      likes,
+     reactions,
     comments[]{
       comment,
       _key,

@@ -1,3 +1,4 @@
+import { GithubCounter, GithubSelector } from "react-reactions";
 import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -15,174 +16,201 @@ import useAuthStore from "../../store/authStore";
 import { useRouter } from "next/router";
 
 const Detail = ({ postDetails }: IProps) => {
-	const [post, setPost] = useState(postDetails);
-	const [playing, setPlaying] = useState(false);
-	const [isVideoMuted, setIsVideoMuted] = useState(false);
-	const videoRef = useRef<HTMLVideoElement>(null);
-	const router = useRouter();
-	const { userProfile }: any = useAuthStore();
-	const [comment, setComment] = useState(" ");
-	const [isPostingComment, setIsPostingComment] = useState(false);
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [post, setPost] = useState(postDetails);
+  const [playing, setPlaying] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const router = useRouter();
+  const { userProfile }: any = useAuthStore();
+  const [comment, setComment] = useState(" ");
+  const [isPostingComment, setIsPostingComment] = useState(false);
 
-	const onVideoClick = () => {
-		if (playing) {
-			videoRef?.current?.pause();
-			setPlaying(false);
-		} else {
-			videoRef?.current?.play();
-			setPlaying(true);
-		}
-	};
+  const onVideoClick = () => {
+    if (playing) {
+      videoRef?.current?.pause();
+      setPlaying(false);
+    } else {
+      videoRef?.current?.play();
+      setPlaying(true);
+    }
+  };
 
-	useEffect(() => {
-		if (post && videoRef?.current) {
-			videoRef.current.muted = isVideoMuted;
-		}
-	}, [post, isVideoMuted]);
+  useEffect(() => {
+    if (post && videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
+    }
+  }, [post, isVideoMuted]);
 
-	const handleLike = async (like: boolean) => {
-		if (userProfile) {
-			const { data } = await axios.put(`${BASE_URL}/api/like`, {
-				userId: userProfile._id,
-				postId: post._id,
-				like,
-			});
+  const handleLike = async (like: boolean) => {
+    if (userProfile) {
+      const { data } = await axios.put(`${BASE_URL}/api/like`, {
+        userId: userProfile._id,
+        postId: post._id,
+        like,
+      });
 
-			setPost({ ...post, likes: data.likes });
-		}
-	};
+      setPost({ ...post, likes: data.likes });
+    }
+  };
 
-	const addComment = async (e) => {
-		e.preventDefault();
+  const handleEmoji = (emoji: any) => {
+    setChosenEmoji(emoji);
+    console.log(post.reactions);
+    console.log(
+      post.reactions.map((e) => ({
+        emoji: e.emoji,
+        user: e.userRef._ref,
+      }))
+    );
+  };
 
-		if (userProfile && comment) {
-			setIsPostingComment(true);
+  const handleReaction = async (emoji: any) => {
+    // if (userProfile) {
+    //   const { data } = await axios.delete(
+    //     `${BASE_URL}/api/postReaction/${post._id}`,
+    //     {
+    //       userId: userProfile._id,
+    //       emoji,
+    //     }
+    //   );
+    // }
+  };
 
-			const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
-				userId: userProfile._id,
-				comment,
-			});
+  const addComment = async (e: any) => {
+    e.preventDefault();
 
-			setPost({ ...post, comments: data.comments });
-			setComment("");
-			setIsPostingComment(false);
-		}
-	};
+    if (userProfile && comment) {
+      setIsPostingComment(true);
 
-	if (!post) return null;
+      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        comment,
+      });
 
-	return (
-		<div className="flex w-full absolute left-0 top-0 bg-white flex-wrap lg:flex-nowrap">
-			<div className="relative flex-2 w-[1000px] lg:w-9/12 flex justify-center items-center bg-black">
-				<div className="absolute top-6 left-2 lg:left-6 flex gap-6 z-50">
-					<p className="cursor-pointer" onClick={() => router.back()}>
-						<MdOutlineCancel className="text-white text-[35px]" />
-					</p>
-				</div>
-				<div className="relative">
-					<div className="lg:h-[100vh] h-[60vh]">
-						<video
-							ref={videoRef}
-							loop
-							onClick={onVideoClick}
-							src={post.video.asset.url}
-							className="h-full cursor-pointer"
-						></video>
-					</div>
-					<div className="absolute top-[45%] left-[45%] cursor-pointer">
-						{!playing && (
-							<button onClick={onVideoClick}>
-								<BsFillPlayFill className="text-white text-6xl lg:text-8xl" />
-							</button>
-						)}
-					</div>
-				</div>
-				<div className="absolute bottom-5 lg:bottom-10 right-5 lg:right-10 cursor">
-					{isVideoMuted ? (
-						<button onClick={() => setIsVideoMuted(false)}>
-							<HiVolumeOff className="text-white text-2xl lg:text-4xl" />
-						</button>
-					) : (
-						<button onClick={() => setIsVideoMuted(true)}>
-							<HiVolumeUp className="text-white text-2xl lg:text-4xl" />
-						</button>
-					)}
-				</div>
-			</div>
+      setPost({ ...post, comments: data.comments });
+      setComment("");
+      setIsPostingComment(false);
+    }
+  };
 
-			<div className="relative w-[1000px] md:w-[900px] lg:w-[700px]">
-				<div className="lg:mt-5 mt-2">
-					<div className="flex gap-3 p-2 cursor-pointer font-semibold rounded">
-						<div className="ml-4 md:w-20 md:h-20 w-16 h-16">
-							<Link href="/">
-								<>
-									<Image
-										width={62}
-										height={62}
-										className="rounded-full"
-										src={post.postedBy.image}
-										alt="profile photo"
-										layout="responsive"
-									/>
-								</>
-							</Link>
-						</div>
-						<div>
-							<Link href="/">
-								<div className="mt-3 flex flex-col gap-2">
-									<p className="flex gap-2 items-center md:text-md font-bold text-primary">
-										{post.postedBy.userName} {` `}
-										<GoVerified className="text-blue-400 text-md" />
-									</p>
-									<p className="capitalize font-medium text-xs text-gray-500 hidden md:block">
-										{post.postedBy.userName}
-									</p>
-								</div>
-							</Link>
-						</div>
-					</div>
+  if (!post) return null;
 
-					<p className="px-10 text-lg text-gray-600 mt-3">{post.caption}</p>
+  return (
+    <div className="flex w-full absolute left-0 top-0 bg-white flex-wrap lg:flex-nowrap">
+      <div className="relative flex-2 w-[1000px] lg:w-9/12 flex justify-center items-center bg-black">
+        <div className="absolute top-6 left-2 lg:left-6 flex gap-6 z-50">
+          <p className="cursor-pointer" onClick={() => router.back()}>
+            <MdOutlineCancel className="text-white text-[35px]" />
+          </p>
+        </div>
+        <div className="relative">
+          <div className="lg:h-[100vh] h-[60vh]">
+            <video
+              ref={videoRef}
+              loop
+              onClick={onVideoClick}
+              src={post.video.asset.url}
+              className="h-full cursor-pointer"
+            ></video>
+          </div>
+          <div className="absolute top-[45%] left-[45%] cursor-pointer">
+            {!playing && (
+              <button onClick={onVideoClick}>
+                <BsFillPlayFill className="text-white text-6xl lg:text-8xl" />
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="absolute bottom-5 lg:bottom-10 right-5 lg:right-10 cursor">
+          {isVideoMuted ? (
+            <button onClick={() => setIsVideoMuted(false)}>
+              <HiVolumeOff className="text-white text-2xl lg:text-4xl" />
+            </button>
+          ) : (
+            <button onClick={() => setIsVideoMuted(true)}>
+              <HiVolumeUp className="text-white text-2xl lg:text-4xl" />
+            </button>
+          )}
+        </div>
+      </div>
 
-					<div className="px-10 pb-2">
-						{userProfile && (
-							<LikeButton
-								likes={post.likes}
-								handleLike={() => handleLike(true)}
-								handleDislike={() => handleLike(false)}
-							/>
-						)}
-					</div>
-					<hr />
-					<Comments
-						comment={comment}
-						setComment={setComment}
-						addComment={addComment}
-						comments={post.comments}
-						isPostingComment={isPostingComment}
-					/>
-				</div>
-			</div>
-		</div>
-	);
+      <div className="relative w-[1000px] md:w-[900px] lg:w-[700px]">
+        <div className="lg:mt-5 mt-2">
+          <div className="flex gap-3 p-2 cursor-pointer font-semibold rounded">
+            <div className="ml-4 md:w-20 md:h-20 w-16 h-16">
+              <Link href="/">
+                <>
+                  <Image
+                    width={62}
+                    height={62}
+                    className="rounded-full"
+                    src={post.postedBy.image}
+                    alt="profile photo"
+                    layout="responsive"
+                  />
+                </>
+              </Link>
+            </div>
+            <div>
+              <Link href="/">
+                <div className="mt-3 flex flex-col gap-2">
+                  <p className="flex gap-2 items-center md:text-md font-bold text-primary">
+                    {post.postedBy.userName} {` `}
+                    <GoVerified className="text-blue-400 text-md" />
+                  </p>
+                  <p className="capitalize font-medium text-xs text-gray-500 hidden md:block">
+                    {post.postedBy.userName}
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <p className="px-10 text-lg text-gray-600 mt-3">{post.caption}</p>
+
+          <div className="px-10 pb-2">
+            {userProfile && (
+              <LikeButton
+                likes={post.likes}
+                handleLike={() => handleLike(true)}
+                handleDislike={() => handleLike(false)}
+              />
+            )}
+            <div className="px-10 pb-2">{chosenEmoji}</div>
+          </div>
+          <GithubSelector onSelect={handleEmoji} />
+          <GithubCounter counters={post.reactions} onSelect={handleReaction} />
+          <hr />
+          <Comments
+            comment={comment}
+            setComment={setComment}
+            addComment={addComment}
+            comments={post.comments}
+            isPostingComment={isPostingComment}
+          />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 interface IProps {
-	postDetails: Video;
+  postDetails: Video;
 }
 
 export const getServerSideProps = async ({
-	params: { id },
+  params: { id },
 }: {
-	params: { id: string };
+  params: { id: string };
 }) => {
-	const res = await axios.get(`${BASE_URL}/api/post/${id}`);
+  const res = await axios.get(`${BASE_URL}/api/post/${id}`);
 
-	return {
-		props: {
-			postDetails: res.data,
-		},
-	};
+  return {
+    props: {
+      postDetails: res.data,
+    },
+  };
 };
 
 export default Detail;

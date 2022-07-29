@@ -12,6 +12,13 @@ export interface Video {
     userName: string;
     image: string;
   };
+  reactions: {
+    _key: string,
+    emoji: string,
+    userRef: {
+      _ref: string
+    }
+  }[];
   likes: {
     postedBy: {
       _id: string;

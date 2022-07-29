@@ -38,6 +38,12 @@ export default {
       ],
     },
     {
+      name: "reactions",
+      title: "Reactions",
+      type: "array",
+      of: [{ type: "reaction" }],
+    },
+    {
       name: "comments",
       title: "Comments",
       type: "array",
