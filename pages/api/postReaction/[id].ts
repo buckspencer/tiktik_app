@@ -2,22 +2,32 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { client } from '../../../utils/client';
-import { postDetailQuery } from '../../../utils/queries';
 import { uuid } from 'uuidv4';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
- if (req.method === "PUT") {
-    const {emoji, userId} = req.body;
-    const {postId}:any = req.query;
+  if(req.method === "PUT") {
+    const {id}:any = req.query;
+    const {insert, userId, reactionKey}:{insert: boolean, userId: string, reactionKey:string} = req.body;
+    // const sanitySetter = {[reactionKey]: []}
 
-    const data = await client
-    .patch(postId)
-    .unset([`reactions[emoji == "${emoji}" && userRef._ref match "${userId}"]`])
-    .commit()
+    const data =
+     insert ? await client
+     .patch(id)
+     .setIfMissing({[reactionKey]: []})
+     .insert('after', `${reactionKey}[-1]`, [
+       {
+         _ref: userId
+       }
+     ])
+     .commit({autoGenerateArrayKeys: true}) :
+     await client
+        .patch(id)
+        .unset([`${reactionKey}[_ref=="${userId}"]`])
+        .commit()
 
-    res.status(200).json(data);
+      res.status(200).json(data);
   }
 }

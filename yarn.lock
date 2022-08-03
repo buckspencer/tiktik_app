@@ -139,6 +139,18 @@
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
 
+"@types/lodash.findkey@^4.6.7":
+  "integrity" "sha512-huAfe0SuQT2gnF37C/C7xiMSWZDeD8bGveTYQuF4UkRBFdzO1coSFHwucK5b4SUiBDW1mH9c7uTJ4VokATo3aw=="
+  "resolved" "https://registry.npmjs.org/@types/lodash.findkey/-/lodash.findkey-4.6.7.tgz"
+  "version" "4.6.7"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  "integrity" "sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.182.tgz"
+  "version" "4.14.182"
+
 "@types/node@18.0.1":
   "integrity" "sha512-CmR8+Tsy95hhwtZBKJBs0/FFq4XX7sDZHlGGf+0q+BRZfMbOTkzkj0AFAuTyXbObDIoanaBBW0+KEW+m3N16Wg=="
   "resolved" "https://registry.npmjs.org/@types/node/-/node-18.0.1.tgz"
@@ -1577,6 +1589,11 @@
   "integrity" "sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow=="
   "resolved" "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
   "version" "4.0.8"
+
+"lodash.findkey@^4.6.0":
+  "integrity" "sha512-Y+f2R8KsUDJVqdfeai01P5A1IQeMWsMG1p0rghzdhIl7TIap47Y2Z5UJK8x4pstixNL56KVHFRE1IW9jvRwy4g=="
+  "resolved" "https://registry.npmjs.org/lodash.findkey/-/lodash.findkey-4.6.0.tgz"
+  "version" "4.6.0"
 
 "lodash.merge@^4.6.2":
   "integrity" "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="

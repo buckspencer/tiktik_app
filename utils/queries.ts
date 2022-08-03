@@ -1,13 +1,3 @@
-export const deletePostReactionQuery = (postId: string, userId: string, emoji: string) => {
-    const query = `*[_type == "post" && _id == "${postId}" ]{
-      _id,
-      caption,
-      reactions[emoji == "${emoji}" && userRef._ref match "${userId}"]{_key}
-    }`
-
-    return query;
-}
-
 export const allPostsQuery = () => {
   const query = `*[_type == "post"] | order(_createdAt desc){
     _id,
@@ -42,8 +32,8 @@ export const allPostsQuery = () => {
 export const postDetailQuery = (postId: string | string[]) => {
   const query = `*[_type == "post" && _id == '${postId}']{
     _id,
-     caption,
-       video{
+    caption,
+      video{
         asset->{
           _id,
           url
@@ -55,8 +45,16 @@ export const postDetailQuery = (postId: string | string[]) => {
       userName,
       image
     },
-     likes,
-     reactions,
+    likes,
+    "reactions": {
+      "reactionThumbsUp": reactionThumbsUp[]._ref,
+      "reactionThumbsDown": reactionThumbsDown[]._ref,
+      "reactionSmile": reactionSmile[]._ref,
+      "reactionParty": reactionParty[]._ref,
+      "reactionFrown": reactionFrown[]._ref,
+      "reactionHeart": reactionHeart[]._ref,
+
+    },
     comments[]{
       comment,
       _key,

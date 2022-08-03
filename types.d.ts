@@ -1,23 +1,13 @@
 export interface Video {
-  caption: string;
-  video: {
-    asset: {
-      _id: string;
-      url: string;
-    };
-  };
   _id: string;
-  postedBy: {
-    _id: string;
-    userName: string;
-    image: string;
-  };
-  reactions: {
-    _key: string,
-    emoji: string,
-    userRef: {
-      _ref: string
-    }
+  userId: string;
+  caption: string;
+  comments: {
+    comment: string;
+    _key: string;
+    postedBy: {
+      _ref: string;
+    };
   }[];
   likes: {
     postedBy: {
@@ -26,14 +16,25 @@ export interface Video {
       image: string;
     };
   }[];
-  comments: {
-    comment: string;
-    _key: string;
-    postedBy: {
-      _ref: string;
-    };
+  postedBy: {
+    _id: string;
+    userName: string;
+    image: string;
+  };
+  reactions: {
+    reactionThumbsUp: array;
+    reactionThumbsDown: array;
+    reactionSmile: array;
+    reactionParty: array;
+    reactionFrown: array;
+    reactionHeart: array;
   }[];
-  userId: string;
+  video: {
+    asset: {
+      _id: string;
+      url: string;
+    };
+  };
 }
 
 export interface IUser {

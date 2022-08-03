@@ -1,6 +1,7 @@
 import { GithubCounter, GithubSelector } from "react-reactions";
 import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import React, { useEffect, useRef, useState } from "react";
+import _, { findKey } from "lodash";
 
 import { BASE_URL } from "../../utils";
 import { BsFillPlayFill } from "react-icons/bs";
@@ -12,17 +13,19 @@ import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
 import { Video } from "../../types";
 import axios from "axios";
+import { reactionEmojis } from "../../utils/constants";
 import useAuthStore from "../../store/authStore";
 import { useRouter } from "next/router";
 
 const Detail = ({ postDetails }: IProps) => {
-  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [mappedReactions, setMappedReactions] = useState({});
   const [post, setPost] = useState(postDetails);
   const [playing, setPlaying] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [style, setStyle] = useState({ display: "none" });
   const videoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
-  const { userProfile }: any = useAuthStore();
+  const { userProfile, allUsers }: any = useAuthStore();
   const [comment, setComment] = useState(" ");
   const [isPostingComment, setIsPostingComment] = useState(false);
 
@@ -40,6 +43,7 @@ const Detail = ({ postDetails }: IProps) => {
     if (post && videoRef?.current) {
       videoRef.current.muted = isVideoMuted;
     }
+    updateUserReactions(post);
   }, [post, isVideoMuted]);
 
   const handleLike = async (like: boolean) => {
@@ -49,32 +53,40 @@ const Detail = ({ postDetails }: IProps) => {
         postId: post._id,
         like,
       });
-
+      console.log(data);
       setPost({ ...post, likes: data.likes });
     }
   };
 
-  const handleEmoji = (emoji: any) => {
-    setChosenEmoji(emoji);
-    console.log(post.reactions);
-    console.log(
-      post.reactions.map((e) => ({
-        emoji: e.emoji,
-        user: e.userRef._ref,
-      }))
-    );
+  // When emoji in selector is clicked - Adds Emojis
+  const handleEmoji = async (emoji: any) => {
+    const reactionKey = findKey(reactionEmojis, (value) => value === emoji);
+
+    if (userProfile && !post.reactions[reactionKey].includes(userProfile._id)) {
+      const { data } = await axios.put(
+        `${BASE_URL}/api/postReaction/${post._id}`,
+        {
+          userId: userProfile._id,
+          reactionKey: reactionKey,
+          insert: true,
+        }
+      );
+      window.location.reload();
+    }
   };
 
-  const handleReaction = async (emoji: any) => {
-    // if (userProfile) {
-    //   const { data } = await axios.delete(
-    //     `${BASE_URL}/api/postReaction/${post._id}`,
-    //     {
-    //       userId: userProfile._id,
-    //       emoji,
-    //     }
-    //   );
-    // }
+  // When emoji in counter is clicked - if user has already made reaction then remove reaction
+  const handleReaction = async (emoji: string) => {
+    const reactionKey = findKey(reactionEmojis, (value) => value === emoji);
+
+    if (userProfile) {
+      await axios.put(`${BASE_URL}/api/postReaction/${post._id}`, {
+        userId: userProfile._id,
+        reactionKey: reactionKey,
+        insert: false,
+      });
+      window.location.reload();
+    }
   };
 
   const addComment = async (e: any) => {
@@ -92,6 +104,18 @@ const Detail = ({ postDetails }: IProps) => {
       setComment("");
       setIsPostingComment(false);
     }
+  };
+
+  const updateUserReactions = (_post: any) => {
+    const counterObjects = Object.keys(reactionEmojis).flatMap((reaction) =>
+      _post.reactions[reaction]?.map((id) => ({
+        emoji: reactionEmojis[reaction],
+        by: allUsers.find(({ _id }) => _id == id)?.userName,
+        insert: false,
+      }))
+    );
+
+    setMappedReactions(counterObjects.filter((e) => e));
   };
 
   if (!post) return null;
@@ -177,10 +201,16 @@ const Detail = ({ postDetails }: IProps) => {
                 handleDislike={() => handleLike(false)}
               />
             )}
-            <div className="px-10 pb-2">{chosenEmoji}</div>
           </div>
-          <GithubSelector onSelect={handleEmoji} />
-          <GithubCounter counters={post.reactions} onSelect={handleReaction} />
+          <div>
+            <GithubSelector onSelect={handleEmoji} />
+          </div>
+          <div>
+            <GithubCounter
+              counters={mappedReactions}
+              onSelect={handleReaction}
+            />
+          </div>
           <hr />
           <Comments
             comment={comment}

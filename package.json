@@ -17,6 +17,7 @@
     "@uppy/react": "^2.2.2",
     "axios": "^0.27.2",
     "jwt-decode": "^3.1.2",
+    "lodash.findkey": "^4.6.0",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
@@ -27,6 +28,7 @@
     "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
+    "@types/lodash.findkey": "^4.6.7",
     "@types/node": "18.0.1",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",

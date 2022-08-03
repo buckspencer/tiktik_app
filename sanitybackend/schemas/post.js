@@ -38,10 +38,59 @@ export default {
       ],
     },
     {
-      name: "reactions",
-      title: "Reactions",
+      name: "reactionThumbsUp",
+      title: "ReactionThumbsUp",
       type: "array",
-      of: [{ type: "reaction" }],
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "user" }],
+        },
+      ],
+    },
+    {
+      name: "reactionThumbsDown",
+      title: "ReactionThumbsDown",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "user" }],
+        },
+      ],
+    },
+    {
+      name: "reactionParty",
+      title: "ReactionParty",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "user" }],
+        },
+      ],
+    },
+    {
+      name: "reactionSmile",
+      title: "ReactionSmile",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "user" }],
+        },
+      ],
+    },
+    {
+      name: "reactionHeart",
+      title: "ReactionHeart",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "user" }],
+        },
+      ],
     },
     {
       name: "comments",
