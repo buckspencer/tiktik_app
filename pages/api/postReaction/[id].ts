@@ -11,7 +11,6 @@ export default async function handler(
   if(req.method === "PUT") {
     const {id}:any = req.query;
     const {insert, userId, reactionKey}:{insert: boolean, userId: string, reactionKey:string} = req.body;
-    // const sanitySetter = {[reactionKey]: []}
 
     const data =
      insert ? await client
