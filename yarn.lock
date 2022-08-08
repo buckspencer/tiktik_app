@@ -146,6 +146,13 @@
   dependencies:
     "@types/lodash" "*"
 
+"@types/lodash.without@^4.4.7":
+  "integrity" "sha512-T5Tfz45ZNn5YyFz8lFdsEN8os5T7BEXGuMCRSzmDavxUGwSOX2ijaOkjicnNlL/l6Hrs6UJPIsHebch3gLnpJg=="
+  "resolved" "https://registry.npmjs.org/@types/lodash.without/-/lodash.without-4.4.7.tgz"
+  "version" "4.4.7"
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash@*":
   "integrity" "sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q=="
   "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.182.tgz"

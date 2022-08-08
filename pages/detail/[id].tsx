@@ -11,7 +11,6 @@ import { BsFillPlayFill } from "react-icons/bs";
 import Comments from "../../components/Comments";
 import { GoVerified } from "react-icons/go";
 import Image from "next/image";
-import LikeButton from "../../components/LikeButton";
 import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
 import { Video } from "../../types";
