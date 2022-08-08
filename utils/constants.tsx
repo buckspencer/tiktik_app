@@ -2,6 +2,8 @@ import { BsCode, BsEmojiSunglasses } from "react-icons/bs";
 import { FaGamepad, FaMedal, FaPaw } from "react-icons/fa";
 import { GiCakeSlice, GiGalaxy, GiLipstick } from "react-icons/gi";
 
+import { Reaction } from "@charkour/react-reactions";
+
 export const reactionEmojis = {
   reactionThumbsUp: "👍",
   reactionThumbsDown: "👎",
@@ -10,6 +12,15 @@ export const reactionEmojis = {
   reactionHeart: "❤️",
   reactionFrown: "😕",
 };
+
+export const selectorEmojis: Reaction[] = [
+  { label: "yup", node: <div>👍</div>, key: "reactionThumbsUp" },
+  { label: "nope", node: <div>👎</div>, key: "reactionThumbsDown" },
+  { label: "party", node: <div>🎉</div>, key: "reactionParty" },
+  { label: "smile", node: <div>😄</div>, key: "reactionSmile" },
+  { label: "heart", node: <div>❤️</div>, key: "reactionHeart" },
+  { label: "hmm", node: <div>😕</div>, key: "reactionFrown" },
+];
 
 export const topics = [
   {
