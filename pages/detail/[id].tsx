@@ -220,7 +220,9 @@ const Detail = ({ postDetails }: IProps) => {
             </div>
           </div>
 
-          <p className="px-10 text-lg text-gray-600 mt-3">{post.caption}</p>
+          <p className="px-10 text-lg text-gray-600 mt-3 mb-5">
+            {post.caption}
+          </p>
           <div className="group justify-start">
             <div className="ml-2 mb-1 hidden group-hover:block">
               <ReactionBarSelector
