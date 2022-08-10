@@ -40,7 +40,7 @@ const Comments = ({
     <>
       <div className=" lg:pb-0 pt-2 pb-[100px]">
         {userProfile && (
-          <div className="float-left pl-5">
+          <div className="float-left pl-2">
             <CommentModal
               addComment={addComment}
               comment={comment}
@@ -52,7 +52,8 @@ const Comments = ({
             />
           </div>
         )}
-
+      </div>
+      <div className="lg:pb-0 pt-2 pb-[100px]">
         <div className="overflow-scroll mt-8">
           {comments?.length > 0 ? (
             comments?.map((item: IComment, idx: number) => (
@@ -62,7 +63,7 @@ const Comments = ({
                     user._id === (item.postedBy._id || item.postedBy._ref) && (
                       <div className="p-2 items-center" key={idx}>
                         <Link href={`/profile/${user._id}`}>
-                          <div className="flex items-start gap-3">
+                          <div className="flex items-start pl-5 gap-3">
                             <div className="w-8 h-8">
                               <Image
                                 src={user.image}
@@ -84,7 +85,7 @@ const Comments = ({
                             </div>
                           </div>
                         </Link>
-                        <div className="mt-3">
+                        <div className="mt-3 pl-5">
                           <p>{item.comment}</p>
                         </div>
                       </div>
