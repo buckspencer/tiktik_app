@@ -5,6 +5,7 @@ import { GoVerified } from "react-icons/go";
 import { IUser } from "../types";
 import Image from "next/image";
 import Link from "next/link";
+import { MdOutlineCancel } from "react-icons/md";
 import NoResults from "./NoResults";
 import useAuthStore from "../store/authStore";
 
@@ -26,11 +27,12 @@ interface IComment {
 }
 
 const Comments = ({
-  comment,
-  setComment,
   addComment,
+  comment,
   comments,
+  deleteComment,
   isPostingComment,
+  setComment,
   showModal,
   setShowModal,
 }: IProps) => {
@@ -62,6 +64,15 @@ const Comments = ({
                   (user: IUser) =>
                     user._id === (item.postedBy._id || item.postedBy._ref) && (
                       <div className="p-2 items-center" key={idx}>
+                        {userProfile._id ===
+                          (item.postedBy._id || item.postedBy._ref) && (
+                          <button
+                            className="float-right cursor-pointer"
+                            onClick={() => deleteComment(item)}
+                          >
+                            <MdOutlineCancel className="text-black" />
+                          </button>
+                        )}
                         <Link href={`/profile/${user._id}`}>
                           <div className="flex items-start pl-5 gap-3">
                             <div className="w-8 h-8">

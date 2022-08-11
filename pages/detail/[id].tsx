@@ -32,7 +32,7 @@ const Detail = ({ postDetails }: IProps) => {
   const router = useRouter();
   const { userProfile, allUsers }: any = useAuthStore();
   const [comment, setComment] = useState(" ");
-  const [isPostingComment, setIsPostingComment] = useState(false);
+  const [isCallingApi, setIsCallingApi] = useState(false);
 
   const onVideoClick = () => {
     if (playing) {
@@ -111,7 +111,7 @@ const Detail = ({ postDetails }: IProps) => {
     e.preventDefault();
 
     if (userProfile && comment) {
-      setIsPostingComment(true);
+      setIsCallingApi(true);
 
       const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
         userId: userProfile._id,
@@ -120,9 +120,19 @@ const Detail = ({ postDetails }: IProps) => {
 
       setPost({ ...post, comments: data.comments });
       setComment("");
-      setIsPostingComment(false);
+      setIsCallingApi(false);
       setShowModal(false);
     }
+  };
+
+  const deleteComment = async (comment: any) => {
+    const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+      userId: userProfile._id,
+      comment,
+    });
+
+    setPost({ ...post, comments: data.comments });
+    setIsCallingApi(false);
   };
 
   const reactionsFromResponse = (response: any) => {
@@ -241,11 +251,12 @@ const Detail = ({ postDetails }: IProps) => {
             />
           </div>
           <Comments
-            comment={comment}
-            setComment={setComment}
             addComment={addComment}
+            comment={comment}
             comments={post.comments}
-            isPostingComment={isPostingComment}
+            deleteComment={deleteComment}
+            isPostingComment={isCallingApi}
+            setComment={setComment}
             showModal={showModal}
             setShowModal={setShowModal}
           />
