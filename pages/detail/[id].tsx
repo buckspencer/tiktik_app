@@ -4,7 +4,6 @@ import {
   ReactionBarSelector,
   ReactionCounter,
 } from "@charkour/react-reactions";
-import { TwitterIcon, TwitterShareButton } from "react-share";
 import { reactionEmojis, selectorEmojis } from "../../utils/constants";
 
 import { BASE_URL } from "../../utils";
@@ -116,7 +115,10 @@ const Detail = ({ postDetails }: IProps) => {
       const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
         userId: userProfile._id,
         comment,
+        insert: true,
       });
+
+      console.log(data);
 
       setPost({ ...post, comments: data.comments });
       setComment("");
@@ -129,6 +131,7 @@ const Detail = ({ postDetails }: IProps) => {
     const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
       userId: userProfile._id,
       comment,
+      insert: false,
     });
 
     setPost({ ...post, comments: data.comments });

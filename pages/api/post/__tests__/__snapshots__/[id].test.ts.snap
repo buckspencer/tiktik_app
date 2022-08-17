@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GET should return a post 1`] = `
+Object {
+  "_id": "cW1QlAWGawhhxvB3TIW68X",
+  "caption": "Upload with uppy",
+  "comments": Array [
+    Object {
+      "_key": "e8608d20-1ba3-4cb1-92fe-8e3c0f59f795",
+      "comment": "We need more websites.",
+      "postedBy": Object {
+        "_id": "111003577416079876666",
+        "_ref": null,
+      },
+    },
+    Object {
+      "_key": "d4aee97d-a9f2-4d5c-bf2d-de15525eb207",
+      "comment": "Wow ",
+      "postedBy": Object {
+        "_id": "111003577416079876666",
+        "_ref": null,
+      },
+    },
+    Object {
+      "_key": "e713e315-2fc5-457c-9e93-2131d20c96d2",
+      "comment": "Add for test. ",
+      "postedBy": Object {
+        "_id": "111003577416079876666",
+        "_ref": null,
+      },
+    },
+    Object {
+      "_key": "b7ac06c3-d169-4168-8551-a75289eec157",
+      "comment": "wonderful",
+      "postedBy": Object {
+        "_id": "111003577416079876666",
+        "_ref": null,
+      },
+    },
+    Object {
+      "_key": "863b3755-6f88-44c8-834d-4e3665cf9531",
+      "comment": " FOO BAR",
+      "postedBy": Object {
+        "_id": "111003577416079876666",
+        "_ref": null,
+      },
+    },
+  ],
+  "likes": Array [],
+  "postedBy": Object {
+    "_id": "111003577416079876666",
+    "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+    "userName": "Buck Spencer",
+  },
+  "reactions": Object {
+    "reactionFrown": Array [
+      "111003577416079876666",
+    ],
+    "reactionHeart": Array [],
+    "reactionParty": Array [
+      "111003577416079876666",
+    ],
+    "reactionSmile": Array [],
+    "reactionThumbsDown": Array [],
+    "reactionThumbsUp": Array [
+      "111003577416079876666",
+    ],
+  },
+  "userId": "111003577416079876666",
+  "video": Object {
+    "asset": Object {
+      "_id": "file-72308b8d8233f363e0e11a82b0025e63a59c01ae-mp4",
+      "url": "https://cdn.sanity.io/files/xz046p2y/production/72308b8d8233f363e0e11a82b0025e63a59c01ae.mp4",
+    },
+  },
+}
+`;
+
+exports[`PUT insert should return post with newly inserted comment 1`] = `
+Object {
+  "id": "cW1QlAWGawhhxvB3TIW68X",
+}
+`;

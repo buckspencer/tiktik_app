@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`index should return a post 1`] = `
+Array [
+  Object {
+    "_id": "cW1QlAWGawhhxvB3TIW68X",
+    "caption": "Upload with uppy",
+    "comments": Array [
+      Object {
+        "_key": "e8608d20-1ba3-4cb1-92fe-8e3c0f59f795",
+        "comment": "We need more websites.",
+        "postedBy": Object {
+          "_id": "111003577416079876666",
+          "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+          "userName": "Buck Spencer",
+        },
+      },
+      Object {
+        "_key": "d4aee97d-a9f2-4d5c-bf2d-de15525eb207",
+        "comment": "Wow ",
+        "postedBy": Object {
+          "_id": "111003577416079876666",
+          "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+          "userName": "Buck Spencer",
+        },
+      },
+      Object {
+        "_key": "e713e315-2fc5-457c-9e93-2131d20c96d2",
+        "comment": "Add for test. ",
+        "postedBy": Object {
+          "_id": "111003577416079876666",
+          "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+          "userName": "Buck Spencer",
+        },
+      },
+      Object {
+        "_key": "b7ac06c3-d169-4168-8551-a75289eec157",
+        "comment": "wonderful",
+        "postedBy": Object {
+          "_id": "111003577416079876666",
+          "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+          "userName": "Buck Spencer",
+        },
+      },
+      Object {
+        "_key": "863b3755-6f88-44c8-834d-4e3665cf9531",
+        "comment": " FOO BAR",
+        "postedBy": Object {
+          "_id": "111003577416079876666",
+          "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+          "userName": "Buck Spencer",
+        },
+      },
+    ],
+    "likes": Array [],
+    "postedBy": Object {
+      "_id": "111003577416079876666",
+      "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+      "userName": "Buck Spencer",
+    },
+    "userId": "111003577416079876666",
+    "video": Object {
+      "asset": Object {
+        "_id": "file-72308b8d8233f363e0e11a82b0025e63a59c01ae-mp4",
+        "url": "https://cdn.sanity.io/files/xz046p2y/production/72308b8d8233f363e0e11a82b0025e63a59c01ae.mp4",
+      },
+    },
+  },
+  Object {
+    "_id": "gw7R8VGfQihCUGoM3ISiWf",
+    "caption": "Cool trees",
+    "comments": Array [
+      Object {
+        "_key": "a95bb1b3-40b3-43eb-863f-4253d06d7023",
+        "comment": " Wow, those are really cool trees.",
+        "postedBy": Object {
+          "_id": "111003577416079876666",
+          "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+          "userName": "Buck Spencer",
+        },
+      },
+    ],
+    "likes": null,
+    "postedBy": Object {
+      "_id": "111003577416079876666",
+      "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+      "userName": "Buck Spencer",
+    },
+    "userId": "111003577416079876666",
+    "video": Object {
+      "asset": Object {
+        "_id": "file-72308b8d8233f363e0e11a82b0025e63a59c01ae-mp4",
+        "url": "https://cdn.sanity.io/files/xz046p2y/production/72308b8d8233f363e0e11a82b0025e63a59c01ae.mp4",
+      },
+    },
+  },
+  Object {
+    "_id": "2yOjian27GjQDBQ5ldos7F",
+    "caption": "Trees in park",
+    "comments": null,
+    "likes": null,
+    "postedBy": Object {
+      "_id": "111003577416079876666",
+      "image": "https://lh3.googleusercontent.com/a-/AFdZucq8A73XNM5uirfCwK6VVgdUboDra2ryeQWwRA12q-w=s96-c",
+      "userName": "Buck Spencer",
+    },
+    "userId": "111003577416079876666",
+    "video": Object {
+      "asset": Object {
+        "_id": "file-72308b8d8233f363e0e11a82b0025e63a59c01ae-mp4",
+        "url": "https://cdn.sanity.io/files/xz046p2y/production/72308b8d8233f363e0e11a82b0025e63a59c01ae.mp4",
+      },
+    },
+  },
+]
+`;
