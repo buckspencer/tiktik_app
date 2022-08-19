@@ -20,18 +20,24 @@ import useAuthStore from "../../store/authStore";
 import { useRouter } from "next/router";
 import without from "lodash.without";
 
+type ReactionsObject = {
+  reactionThumbsUp: string;
+  reactionThumbsDown: string;
+  reactionParty: string;
+  reactionSmile: string;
+  reactionHeart: string;
+  reactionFrown: string;
+};
+
 const Detail = ({ postDetails }: IProps) => {
   const [mappedReactions, setMappedReactions] = useState([]);
   const [post, setPost] = useState(postDetails);
   const [playing, setPlaying] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
-  const [usedReactions, setUsedReactions] = useState([]);
+  const [usedReactions, setUsedReactions] = useState(Array<string>);
   const videoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
   const { userProfile, allUsers }: any = useAuthStore();
-  const [comment, setComment] = useState(" ");
-  const [isCallingApi, setIsCallingApi] = useState(false);
 
   const onVideoClick = () => {
     if (playing) {
@@ -50,26 +56,28 @@ const Detail = ({ postDetails }: IProps) => {
     reactionsFromPost(post);
   }, [post, isVideoMuted]);
 
-  const handleLike = async (like: boolean) => {
-    if (userProfile) {
-      const { data } = await axios.put(`${BASE_URL}/api/like`, {
-        userId: userProfile._id,
-        postId: post._id,
-        like,
-      });
-      setPost({ ...post, likes: data.likes });
-    }
-  };
   const reactionCounterStyle: CSS.Properties = {
     marginLeft: "5px",
     marginBottom: "2px",
   };
 
-  const handleAddReaction = async (reactionKey: any) => {
+  const inUsedReactions = (_key: string): boolean => {
+    return !usedReactions.includes(_key);
+  };
+
+  const reactionInReactions = (_key: string): boolean => {
+    return !post.reactions[_key]?.includes(userProfile._id);
+  };
+
+  const addReactionToReactions = (_reaction: string): string[] => {
+    return usedReactions.concat([_reaction]);
+  };
+
+  const handleAddReaction = async (reactionKey: string) => {
     if (
       userProfile &&
-      !post.reactions[reactionKey]?.includes(userProfile._id) &&
-      !usedReactions.includes(reactionKey)
+      reactionInReactions(reactionKey) &&
+      inUsedReactions(reactionKey)
     ) {
       const { data } = await axios.put(
         `${BASE_URL}/api/postReaction/${post._id}`,
@@ -79,7 +87,7 @@ const Detail = ({ postDetails }: IProps) => {
           insert: true,
         }
       );
-      setUsedReactions(usedReactions.concat([reactionKey]));
+      setUsedReactions(addReactionToReactions(reactionKey));
       reactionsFromResponse(data);
     }
   };
@@ -101,66 +109,34 @@ const Detail = ({ postDetails }: IProps) => {
         }
       );
 
-      setUsedReactions(filtered);
+      setUsedReactions(filtered as []);
       reactionsFromResponse(data);
     }
   };
 
-  const addComment = async (e: any) => {
-    e.preventDefault();
-
-    if (userProfile && comment) {
-      setIsCallingApi(true);
-
-      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
-        userId: userProfile._id,
-        comment,
-        insert: true,
-      });
-
-      console.log(data);
-
-      setPost({ ...post, comments: data.comments });
-      setComment("");
-      setIsCallingApi(false);
-      setShowModal(false);
-    }
-  };
-
-  const deleteComment = async (comment: any) => {
-    const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
-      userId: userProfile._id,
-      comment,
-      insert: false,
-    });
-
-    setPost({ ...post, comments: data.comments });
-    setIsCallingApi(false);
-  };
-
   const reactionsFromResponse = (response: any) => {
     const counterObjects = Object.keys(reactionEmojis).flatMap(
-      (reactionEmoji) => {
-        return response[reactionEmoji]?.map((reaction) => ({
-          node: <div className="mx-1">{reactionEmojis[reactionEmoji]}</div>,
+      (reactionEmoji: string) => {
+        return response[reactionEmoji]?.map((reaction: ReactionsObject) => ({
+          node: <div className="mx-1">{reactionEmojis[reactionEmoji as keyof ReactionsObject]}</div>,
           label: "smile",
           by: allUsers.find(({ _id }) => _id == reaction._ref)?.userName,
         }));
       }
     );
-    setMappedReactions(counterObjects.filter((e) => e));
+    setMappedReactions(counterObjects.filter((e) => e) as []);
   };
 
   const reactionsFromPost = (_post: Video) => {
     const counterObjects = Object.keys(reactionEmojis).flatMap((reaction) => {
-      return _post.reactions[reaction]?.map((id) => ({
-        node: <div className="mx-1">{reactionEmojis[reaction]}</div>,
+      return _post.reactions[reaction]?.map((id: string) => ({
+        node: <div className="mx-1">{reactionEmojis[reaction as keyof ReactionsObject]}</div>,
         label: reaction,
         by: allUsers.find(({ _id }) => _id == id)?.userName,
       }));
     });
 
-    setMappedReactions(counterObjects.filter((e) => e));
+    setMappedReactions(counterObjects.filter((e) => e) as []);
   };
 
   if (!post) return null;
@@ -253,16 +229,7 @@ const Detail = ({ postDetails }: IProps) => {
               style={reactionCounterStyle}
             />
           </div>
-          <Comments
-            addComment={addComment}
-            comment={comment}
-            comments={post.comments}
-            deleteComment={deleteComment}
-            isPostingComment={isCallingApi}
-            setComment={setComment}
-            showModal={showModal}
-            setShowModal={setShowModal}
-          />
+          <Comments parentComments={post.comments} postId={post._id} />
         </div>
       </div>
     </div>
@@ -287,3 +254,6 @@ export const getServerSideProps = async ({
 };
 
 export default Detail;
+function key(key: any) {
+  throw new Error("Function not implemented.");
+}

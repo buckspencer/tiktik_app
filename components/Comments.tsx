@@ -1,5 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 
+import { BASE_URL } from "../utils";
 import CommentModal from "./CommentModal";
 import { GoVerified } from "react-icons/go";
 import { IUser } from "../types";
@@ -7,16 +8,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
 import NoResults from "./NoResults";
+import { VIDEO_SIZE } from "../utils/constants";
+import axios from "axios";
 import useAuthStore from "../store/authStore";
 
 interface IProps {
-  isPostingComment: boolean;
-  comment: string;
-  setComment: Dispatch<SetStateAction<string>>;
-  showModal: boolean;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
-  addComment: (e: React.FormEvent) => void;
-  comments: IComment[];
+  postId: string;
+  parentComments: IComment[];
 }
 
 interface IComment {
@@ -26,17 +24,40 @@ interface IComment {
   postedBy: { _ref: string; _id: string };
 }
 
-const Comments = ({
-  addComment,
-  comment,
-  comments,
-  deleteComment,
-  isPostingComment,
-  setComment,
-  showModal,
-  setShowModal,
-}: IProps) => {
+const Comments = ({ parentComments, postId }: IProps) => {
   const { userProfile, allUsers }: any = useAuthStore();
+  const [showModal, setShowModal] = useState(false);
+  const [isProcessingComment, setIsProcessingComment] = useState(false);
+  const [comments, setComments] = useState(parentComments);
+  const [comment, setComment] = useState(" ");
+
+  const addComment = async (e: any) => {
+    e.preventDefault();
+    setIsProcessingComment(true);
+
+    if (userProfile && comment) {
+      const { data } = await axios.put(`${BASE_URL}/api/post/${postId}`, {
+        userId: userProfile._id,
+        comment,
+        insert: true,
+      });
+
+      setComments(data.comments);
+      setComment("");
+      setShowModal(false);
+      setIsProcessingComment(false);
+    }
+  };
+
+  const deleteComment = async (comment: any) => {
+    const { data } = await axios.put(`${BASE_URL}/api/post/${postId}`, {
+      userId: userProfile._id,
+      comment,
+      insert: false,
+    });
+
+    setComments(data.comments);
+  };
 
   return (
     <>
@@ -44,13 +65,13 @@ const Comments = ({
         {userProfile && (
           <div className="float-left pl-2">
             <CommentModal
+              setShowModal={setShowModal}
+              showModal={showModal}
               addComment={addComment}
               comment={comment}
-              isPostingComment={isPostingComment}
               setComment={setComment}
-              showModal={showModal}
-              setShowModal={setShowModal}
               comments={[]}
+              isProcessingComment={isProcessingComment}
             />
           </div>
         )}
@@ -78,8 +99,8 @@ const Comments = ({
                             <div className="w-8 h-8">
                               <Image
                                 src={user.image}
-                                width={34}
-                                height={34}
+                                width={VIDEO_SIZE}
+                                height={VIDEO_SIZE}
                                 className="rounded-full"
                                 alt="user profile"
                                 layout="responsive"

@@ -1,22 +1,20 @@
 import { MdAddComment, MdOutlineCancel } from "react-icons/md";
-import React, { Dispatch, SetStateAction } from "react";
-
-import router from "next/router";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 interface IProps {
-  isPostingComment: Boolean;
+  isProcessingComment: Boolean;
   comment: string;
   setComment: Dispatch<SetStateAction<string>>;
   addComment: (e: React.FormEvent) => void;
   comments: Comment[];
+  setShowModal: Dispatch<SetStateAction<boolean>>;
   showModal: Boolean;
-  setShowModal: Dispatch<SetStateAction<Boolean>>;
 }
 
 export default function CommentModal({
   addComment,
   comment,
-  isPostingComment,
+  isProcessingComment,
   setComment,
   showModal,
   setShowModal,
@@ -31,7 +29,7 @@ export default function CommentModal({
       >
         <MdAddComment />
       </button>
-      {showModal ? (
+      {showModal || isProcessingComment ? (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <form className="w-full max-w-xl bg-white/95 border-double border-4 border-blue-400  rounded-lg px-4 pt-2">
@@ -54,7 +52,7 @@ export default function CommentModal({
                     type="button"
                     onClick={addComment}
                   >
-                    {isPostingComment ? "Commenting..." : "Comment"}
+                    {isProcessingComment ? "Commenting..." : "Comment"}
                   </button>
                 </div>
               </div>
