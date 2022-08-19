@@ -34,6 +34,13 @@ const Comments = ({ parentComments, postId }: IProps) => {
   const addComment = async (e: any) => {
     e.preventDefault();
     setIsProcessingComment(true);
+    const stopComment = comment.length < 1;
+
+    if (stopComment) {
+      setIsProcessingComment(false);
+      setShowModal(false);
+      return;
+    }
 
     if (userProfile && comment) {
       const { data } = await axios.put(`${BASE_URL}/api/post/${postId}`, {
