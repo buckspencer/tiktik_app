@@ -22,12 +22,12 @@ export default function CommentModal({
   return (
     <>
       <button
-        className="bg-zinc-600/50 text-white active:bg-zinc-600 font-bold uppercase text-sm px-6 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        className="bg-zinc-600/50 text-white active:bg-zinc-600 font-bold text-sm px-6 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
         onClick={() => setShowModal(true)}
         name="Add comment"
       >
-        <MdAddComment />
+        Comment
       </button>
       {showModal || isProcessingComment ? (
         <>
