@@ -65,7 +65,7 @@ export const topics = [
     icon: <GiCakeSlice />,
   },
   {
-    name: "dance",
+    name: "nature",
     icon: <GiGalaxy />,
   },
   {
