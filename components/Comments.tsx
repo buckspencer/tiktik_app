@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
 import NoResults from "./NoResults";
+import ShareModal from "./ShareModal";
 import { VIDEO_SIZE } from "../utils/constants";
 import axios from "axios";
 import useAuthStore from "../store/authStore";
@@ -27,7 +28,9 @@ interface IComment {
 const Comments = ({ parentComments, postId }: IProps) => {
   const { userProfile, allUsers }: any = useAuthStore();
   const [showModal, setShowModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const [isProcessingComment, setIsProcessingComment] = useState(false);
+  const [isProcessingShare, setIsProcessingShare] = useState(false);
   const [comments, setComments] = useState(parentComments);
   const [comment, setComment] = useState(" ");
 
@@ -79,6 +82,12 @@ const Comments = ({ parentComments, postId }: IProps) => {
               setComment={setComment}
               comments={[]}
               isProcessingComment={isProcessingComment}
+            />
+            <ShareModal
+              userName={userProfile.userName}
+              showShareModal={showShareModal}
+              setShowShareModal={setShowShareModal}
+              isProcessingShare={isProcessingShare}
             />
           </div>
         )}
