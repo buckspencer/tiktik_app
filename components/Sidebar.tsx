@@ -1,4 +1,4 @@
-import { AiFillHome, AiOutlineMenu } from "react-icons/ai";
+import { AiFillHome, AiOutlineMenu, AiOutlineRobot } from "react-icons/ai";
 import React, { useState } from "react";
 
 import Discover from "./Discover";
@@ -34,7 +34,15 @@ const Sidebar = () => {
 								<p className="text-2xl">
 									<AiFillHome />
 								</p>
-								<span className="text-xl hidden xl:block">For you</span>
+								<span className="text-xl hidden xl:block">Your feed</span>
+							</div>
+						</Link>
+						<Link href="/users">
+							<div className={normalLink}>
+								<p className="text-2xl">
+									<AiOutlineRobot />
+								</p>
+								<span className="text-xl hidden xl:block">Users</span>
 							</div>
 						</Link>
 					</div>
