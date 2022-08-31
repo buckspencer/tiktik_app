@@ -77,12 +77,22 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           className="rounded-3xl"
         >
           <Link href={userProfile ? `/detail/${post._id}` : "#"}>
-            <video
-              loop
-              ref={videoRef}
-              src={post.video.asset.url}
-              className="lg:w-[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
-            />
+            {post.type === "video" ? (
+              <video
+                loop
+                ref={videoRef}
+                src={post.video.asset.url}
+                className="lg:w-[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
+              />
+            ) : (
+              <Image
+                width={300}
+                height={300}
+                className=""
+                src={post.video.asset.url}
+                alt="custom nft"
+              />
+            )}
           </Link>
           {isHover && (
             <div className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] lg:w-[600px] p-3">
