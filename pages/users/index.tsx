@@ -20,7 +20,6 @@ const Users = () => {
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     setCurrentItems(allUsers.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(allUsers.length / itemsPerPage));
   }, [itemOffset, itemsPerPage]);
