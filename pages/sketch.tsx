@@ -87,7 +87,7 @@ const Sketch = () => {
 
   return (
     <div className="flex w-full h-full absolute left-0 top-[60px] mb-10 pt-10 lg:pt-20 bg-[#F8F8F8] justify-center">
-      <div className="bg-white rounded-lg h-full xl:h-[75vh] w-[75%] flex flex-wrap justify-between">
+      <div className="bg-white rounded-lg h-full xl:h-[60vh] w-[75%] flex flex-wrap justify-between">
         <div className="pt-5 px-7">
           <p className="text-2xl font-bold">Make your mark</p>
           <p className="text-md text-gray-400 mt-1">Design your instant NFT</p>
