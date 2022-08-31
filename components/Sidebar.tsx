@@ -1,6 +1,7 @@
 import {
   AiFillBank,
   AiFillHome,
+  AiFillVideoCamera,
   AiOutlineMenu,
   AiOutlineRobot,
 } from "react-icons/ai";
@@ -45,12 +46,20 @@ const Sidebar = () => {
                 <span className="text-xl hidden xl:block">Users</span>
               </div>
             </Link>
+            <Link href="/upload">
+              <div className={normalLink}>
+                <p className="text-2xl">
+                  <AiFillVideoCamera />
+                </p>
+                <span className="text-xl hidden xl:block">Video upload</span>
+              </div>
+            </Link>
             <Link href="/sketch">
               <div className={normalLink}>
                 <p className="text-2xl">
                   <AiFillBank />
                 </p>
-                <span className="text-xl hidden xl:block">Nft Zone</span>
+                <span className="text-xl hidden xl:block">Nft zone</span>
               </div>
             </Link>
           </div>
