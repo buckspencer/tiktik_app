@@ -2,6 +2,7 @@ export interface Video {
   _id: string;
   userId: string;
   caption: string;
+  type: string;
   comments: {
     comment: string;
     _key: string;
