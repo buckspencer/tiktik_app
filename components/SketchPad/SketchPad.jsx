@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { findDOMNode } from "react-dom";
-import PropTypes from "prop-types";
 import {
-  Pencil,
-  TOOL_PENCIL,
-  Line,
-  TOOL_LINE,
   Ellipse,
-  TOOL_ELLIPSE,
+  Line,
+  Pencil,
   Rectangle,
+  TOOL_ELLIPSE,
+  TOOL_LINE,
+  TOOL_PENCIL,
   TOOL_RECTANGLE,
 } from "./tools";
+import React, { Component } from "react";
+
+import PropTypes from "prop-types";
+import { findDOMNode } from "react-dom";
 
 export const toolsMap = {
   [TOOL_PENCIL]: Pencil,
@@ -44,7 +45,7 @@ export default class SketchPad extends Component {
   static defaultProps = {
     width: 500,
     height: 500,
-    color: "#000",
+    color: "#ffffff",
     size: 5,
     fillColor: "",
     canvasClassName: "canvas",
@@ -61,6 +62,13 @@ export default class SketchPad extends Component {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onDebouncedMove = this.onDebouncedMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.undo = this.undo.bind(this);
+    this.drawing = false;
+    this.pathsry = [];
+    this.points = [];
+
+    this.mouse = { x: 0, y: 0 };
+    this.previous = { x: 0, y: 0 };
   }
 
   componentDidMount() {
@@ -83,7 +91,40 @@ export default class SketchPad extends Component {
     this.tool = this.props.toolsMap[tool](this.ctx);
   }
 
+  oMousePos(canvas, evt) {
+    var ClientRect = canvas.getBoundingClientRect();
+    return {
+      x: Math.round(evt.clientX - ClientRect.left),
+      y: Math.round(evt.clientY - ClientRect.top),
+    };
+  }
+  drawPaths() {
+    // delete everything
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // draw all the paths in the paths array
+    this.pathsry.forEach((path) => {
+      this.ctx.beginPath();
+      this.ctx.moveTo(path[0].x, path[0].y);
+      for (let i = 1; i < path.length; i++) {
+        this.ctx.lineTo(path[i].x, path[i].y);
+      }
+      this.ctx.stroke();
+    });
+  }
+
+  undo() {
+    // remove the last path from the paths array
+    this.pathsry.splice(-1, 1);
+    // draw all the paths in the paths array
+    drawPaths();
+  }
+
   onMouseDown(e) {
+    this.drawing = true;
+    this.previous = { x: this.mouse.x, y: this.mouse.y };
+    this.mouse = this.oMousePos(this.canvas, e);
+    this.points = [];
+    this.points.push({ x: this.mouse.x, y: this.mouse.y });
     const data = this.tool.onMouseDown(
       ...this.getCursorPosition(e),
       this.props.color,
@@ -115,6 +156,12 @@ export default class SketchPad extends Component {
   }
 
   onMouseMove(e) {
+    if (this.drawing === true) {
+      this.previous = { x: this.mouse.x, y: this.mouse.y };
+      this.mouse = this.oMousePos(this.canvas, e);
+      // saving the points in the points array
+      this.points.push({ x: this.mouse.x, y: this.mouse.y });
+    }
     const data = this.tool.onMouseMove(...this.getCursorPosition(e));
     data &&
       data[0] &&
@@ -123,6 +170,9 @@ export default class SketchPad extends Component {
   }
 
   onMouseUp(e) {
+    this.drawing = false;
+    // Adding the path to the array or the paths
+    this.pathsry.push(this.points);
     const data = this.tool.onMouseUp(...this.getCursorPosition(e));
     // data &&
     //   data[0] &&
@@ -151,6 +201,7 @@ export default class SketchPad extends Component {
         onMouseMove={this.onMouseMove}
         onMouseOut={this.onMouseUp}
         onMouseUp={this.onMouseUp}
+        undo={this.undo}
         width={width}
         height={height}
       />

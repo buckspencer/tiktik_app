@@ -17,7 +17,7 @@ import useAuthStore from "../store/authStore";
 
 const Sketch = () => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const [activeTool, setActiveTool] = useState(TOOL_PENCIL);
   const [nftAsset, setNftAsset] = useState<SanityAssetDocument | undefined>();
   const [caption, setCaption] = useState("");
   const [category, setCategory] = useState(topics[0].name);
@@ -33,9 +33,17 @@ const Sketch = () => {
 
   const canvas = document.getElementsByClassName("canvas")[0];
 
+  const BUTTON_STYLE =
+    "inline-block px-6 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-300 hover:shadow-lg focus:bg-gray-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-400 active:shadow-lg transition duration-150 ease-in-out";
+
   const handleClear = () => {
     let context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const handleToolClick = (tool: React.SetStateAction<string>) => {
+    setActiveTool(tool);
+    setTool(tool);
   };
 
   const uploadNft = async () => {
@@ -47,6 +55,27 @@ const Sketch = () => {
             filename: caption,
           })
           .then((data) => {
+            const document = {
+              _type: "post",
+              caption,
+              type: "nft",
+              video: {
+                _type: "file",
+                asset: {
+                  _type: "reference",
+                  _ref: data?._id,
+                },
+              },
+              userId: userProfile?._id,
+              postedBy: {
+                _type: "postedBy",
+                _ref: userProfile?._id,
+              },
+              topic: category,
+            };
+            axios.post(`${BASE_URL}/api/post`, document).then((resp) => {
+              console.log(resp);
+            });
             setNftAsset(data);
             setIsLoading(false);
           });
@@ -57,32 +86,10 @@ const Sketch = () => {
   };
 
   const handlePost = async () => {
-    let response = await uploadNft();
-    if (true) {
-      setSavingPost(true);
-
-      const document = {
-        _type: "post",
-        caption,
-        type: "nft",
-        video: {
-          _type: "file",
-          asset: {
-            _type: "reference",
-            _ref: nftAsset?._id,
-          },
-        },
-        userId: userProfile?._id,
-        postedBy: {
-          _type: "postedBy",
-          _ref: userProfile?._id,
-        },
-        topic: category,
-      };
-      await axios.post(`${BASE_URL}/api/post`, document);
-
+    await uploadNft().then(() => {
+      console.log(nftAsset);
       router.push("/");
-    }
+    });
   };
 
   return (
@@ -133,24 +140,24 @@ const Sketch = () => {
               </option>
             ))}
           </select>
-          <div className="tools">
+          <div className="flex space-x-2 justify-center">
             <button
               style={tool == TOOL_PENCIL ? { fontWeight: "bold" } : undefined}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-              onClick={() => setTool(TOOL_PENCIL)}
+              className={BUTTON_STYLE}
+              onClick={() => handleToolClick(TOOL_PENCIL)}
             >
               Pencil
             </button>
             <button
               style={tool == TOOL_LINE ? { fontWeight: "bold" } : undefined}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className={BUTTON_STYLE}
               onClick={() => setTool(TOOL_LINE)}
             >
               Line
             </button>
             <button
               style={tool == TOOL_ELLIPSE ? { fontWeight: "bold" } : undefined}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className={BUTTON_STYLE}
               onClick={() => setTool(TOOL_ELLIPSE)}
             >
               Ellipse
@@ -159,21 +166,23 @@ const Sketch = () => {
               style={
                 tool == TOOL_RECTANGLE ? { fontWeight: "bold" } : undefined
               }
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className={BUTTON_STYLE}
               onClick={() => setTool(TOOL_RECTANGLE)}
             >
               Rectangle
             </button>
             <button
               style={{}}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className="inline-block px-6 py-2.5 bg-transparent text-blue-600 font-medium text-xs leading-tight uppercase rounded transition duration-150 ease-in-out"
               onClick={handleClear}
             >
               Clear
             </button>
           </div>
           <div className="options">
-            <label htmlFor="">size: </label>
+            <label className="text-md font-medium" htmlFor="">
+              Size:{" "}
+            </label>
             <input
               min="1"
               max="20"
@@ -184,7 +193,9 @@ const Sketch = () => {
             />
           </div>
           <div className="options">
-            <label htmlFor="">color: </label>
+            <label className="text-md font-medium" htmlFor="">
+              Color:{" "}
+            </label>
             <input
               type="color"
               value={color}
@@ -193,16 +204,20 @@ const Sketch = () => {
           </div>
           {tool == TOOL_ELLIPSE || tool == TOOL_RECTANGLE ? (
             <div>
-              <label htmlFor="">fill in:</label>
+              <label className="text-md font-medium mr-2" htmlFor="">
+                Fill in:
+              </label>
               <input
                 type="checkbox"
                 value={fill}
-                style={{ margin: "0 8" }}
                 onChange={(e) => setFill(e.target.checked)}
+                className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain cursor-pointer"
               />
               {fill ? (
                 <span>
-                  <label htmlFor="">with color:</label>
+                  <label className="text-md font-medium mr-3" htmlFor="">
+                    With color:
+                  </label>
                   <input
                     type="color"
                     value={fillColor}
@@ -220,7 +235,7 @@ const Sketch = () => {
             <button
               onClick={handlePost}
               type="button"
-              className="bg-[#1079AC] text-white text-md font-medium p-2 rounded w-28 lg:w-44 float-right outline-none"
+              className="inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg focus:bg-gray-900 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-900 active:shadow-lg transition duration-150 ease-in-out float-right"
             >
               Post
             </button>
