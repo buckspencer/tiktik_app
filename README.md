@@ -20,6 +20,13 @@
 - Uppy (file uploader)
 - Zustand (state management for users)
 
+## Included features:
+
+- Pagination
+- API calls
+- Authentication via Google
+- Responsive styling
+
 ### Screenshots:
 
 - Home screen
